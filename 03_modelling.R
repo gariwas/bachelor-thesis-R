@@ -7,6 +7,15 @@ xx_diff <- readRDS("C:/Users/Igor/Desktop/bachelor-thesis-R/xx_diff_tensor.rds")
 
 set.seed(123)
 est <- tenAR.est(xx_diff, R = 2, P = 1, method = "MLE")
+saveRDS(est, "C:/Users/Igor/Desktop/bachelor-thesis-R/est_mar.rds")
+
+A <- est$A[[1]][[1]][[1]]   # states × states (row interactions)
+B <- est$A[[1]][[1]][[2]]   # sectors × sectors (column interactions)
+rownames(A) <- colnames(A) <- states
+rownames(B) <- colnames(B) <- sectors
+print(round(A, 3))
+print(round(B, 3))
+
 
 # Model summary
 cat("BIC:", est$BIC, "\n")
@@ -33,5 +42,10 @@ cat("All inside unit circle (stable):", all(moduli < 1), "\n")
 # STEP 8: RESIDUAL DIAGNOSTICS
 # ══════════════════════════════════════════════════════════════════════════════
 
+# ── STEP 8b: SAVE ACF OF RESIDUALS ────────────────────────────────────────────
+png(filename = "C:/Users/Igor/Desktop/bachelor-thesis-R/acf_residuals.png",
+    width = 10, height = 8, units = "in", res = 300)
 mplot.acf(res)
+dev.off()
+
 # Goal: no significant spikes remaining → model captured the dynamics

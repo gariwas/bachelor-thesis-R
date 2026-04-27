@@ -82,8 +82,11 @@ dev.off()
 # ══════════════════════════════════════════════════════════════════════════════
 # Significant spike at lag 12 → seasonal pattern → may need seasonal differencing
 
+# ── STEP 5b: SAVE ACF OF DIFFERENCED DATA (original, before model fitting) ────
+png(filename = "C:/Users/Igor/Desktop/bachelor-thesis-R/acf_original.png",
+    width = 10, height = 8, units = "in", res = 300)
 mplot.acf(xx_diff)
-
+dev.off()
 
 # ══════════════════════════════════════════════════════════════════════════════
 # PREPROCESSING DONE — xx_diff is ready for tenAR.est
