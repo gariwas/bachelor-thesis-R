@@ -1,4 +1,4 @@
-# Preprocessing - stability check (eigenvalues and so on)
+# Preprocessing - stability check 
 
 # ══════════════════════════════════════════════════════════════════════════════
 # 02_analysis.R  —  Preprocessing & Modelling
