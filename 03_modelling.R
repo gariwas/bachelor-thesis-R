@@ -6,7 +6,7 @@ xx_diff <- readRDS("C:/Users/Igor/Desktop/bachelor-thesis-R/xx_diff_tensor.rds")
 # ══════════════════════════════════════════════════════════════════════════════
 
 set.seed(123)
-est <- tenAR.est(xx_diff, R = 2, P = 1, method = "MLE")
+est <- tenAR.est(xx_diff, R = 1, P = 1, method = "LSE")
 saveRDS(est, "C:/Users/Igor/Desktop/bachelor-thesis-R/est_mar.rds")
 
 A <- est$A[[1]][[1]][[1]]   # states × states (row interactions)

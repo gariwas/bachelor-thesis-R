@@ -7,8 +7,8 @@
 library(tensorTS)
 library(tseries)
 
-states  <- c("IL", "OH", "MI")
-sectors <- c("MFG", "CONS", "SMS")
+states  <- c("IL", "OH", "MI", "IN", "KY")
+sectors <- c("MFG", "CONS", "RET", "GOVT", "FIRE")
 
 # ── LOAD TENSOR ───────────────────────────────────────────────────────────────
 xx <- readRDS("C:/Users/Igor/Desktop/bachelor-thesis-R/xx_tensor.rds")

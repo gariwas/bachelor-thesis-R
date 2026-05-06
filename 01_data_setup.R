@@ -3,8 +3,8 @@
 # ── CONFIG ────────────────────────────────────────────────────────────────────
 data_dir <- "C:/Users/Igor/Desktop/bachelor-thesis-R/Data/"
 
-states  <- c("IL", "OH", "MI")
-sectors <- c("MFG", "CONS", "SMS")
+states  <- c("IL", "OH", "MI", "IN", "KY")
+sectors <- c("MFG", "CONS", "RET", "GOVT", "FIRE")
 
 # ── READ ALL 9 SERIES ─────────────────────────────────────────────────────────
 series_list <- list()
@@ -56,8 +56,8 @@ cat("Total NAs:", sum(is.na(xx)), "\n")
 # ── VISUALISE ─────────────────────────────────────────────────────────────────
 library(tensorTS)
 
-states  <- c("IL", "OH", "MI")
-sectors <- c("MFG", "CONS", "SMS")
+states  <- c("IL", "OH", "MI", "IN", "KY")
+sectors <- c("MFG", "CONS", "RET", "GOVT", "FIRE")
 
 # ── SAVE PLOT ─────────────────────────────────────────────────────────────────
 out_path <- "C:/Users/Igor/Desktop/bachelor-thesis-R/sectoral_employment.png"
@@ -87,8 +87,7 @@ for (i in seq_along(states)) {
   }
 }
 
-mtext("Sectoral Employment — First 100 Months",
-      outer = TRUE, side = 3, line = 1, cex = 1.1, font = 2)
+
 
 par(mfrow = c(1, 1))
 dev.off()  # ← closes device and writes the file
