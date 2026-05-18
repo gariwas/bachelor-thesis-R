@@ -1,6 +1,6 @@
 # ── PATHS ─────────────────────────────────────────────────────────────────────
 est_path  <- "C:/Users/Igor/Desktop/bachelor-thesis-R/est_mar.rds"
-out_dir   <- "C:/Users/Igor/Desktop/bachelor-thesis-R/"
+out_dir   <- "C:/Users/Igor/Desktop/bachelor-thesis-R/visualisations/"
 
 states  <- c("IL", "OH", "MI", "IN", "KY")
 sectors <- c("MFG", "CONS", "RET", "GOVT", "FIRE")

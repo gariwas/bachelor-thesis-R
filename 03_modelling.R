@@ -43,7 +43,7 @@ cat("All inside unit circle (stable):", all(moduli < 1), "\n")
 # ══════════════════════════════════════════════════════════════════════════════
 
 # ── STEP 8b: SAVE ACF OF RESIDUALS ────────────────────────────────────────────
-png(filename = "C:/Users/Igor/Desktop/bachelor-thesis-R/acf_residuals.png",
+png(filename = "C:/Users/Igor/Desktop/bachelor-thesis-R/visualisations/acf_residuals.png",
     width = 10, height = 8, units = "in", res = 300)
 mplot.acf(res)
 dev.off()

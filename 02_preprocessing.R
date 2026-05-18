@@ -59,7 +59,7 @@ for (i in seq_along(states)) {
 # STEP 4: VISUAL CHECK OF DIFFERENCED DATA
 # ══════════════════════════════════════════════════════════════════════════════
 
-png(filename = "C:/Users/Igor/Desktop/bachelor-thesis-R/employment_differenced.png",
+png(filename = "C:/Users/Igor/Desktop/bachelor-thesis-R/visualisations/employment_differenced.png",
     width = 10, height = 8, units = "in", res = 300)
 
 par(mfrow = c(length(states), length(sectors)), mar = c(2, 2, 2, 1), oma = c(1, 1, 3, 1))
@@ -83,7 +83,7 @@ dev.off()
 # Significant spike at lag 12 → seasonal pattern → may need seasonal differencing
 
 # ── STEP 5b: SAVE ACF OF DIFFERENCED DATA (original, before model fitting) ────
-png(filename = "C:/Users/Igor/Desktop/bachelor-thesis-R/acf_original.png",
+png(filename = "C:/Users/Igor/Desktop/bachelor-thesis-R/visualisations/acf_original.png",
     width = 10, height = 8, units = "in", res = 300)
 mplot.acf(xx_diff)
 dev.off()

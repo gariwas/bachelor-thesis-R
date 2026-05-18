@@ -14,6 +14,11 @@ sector_cols <- list(
   c("#5c4a00", "#a88200", "#e8d44d", "#f5e888", "#faf4c0")   # FIRE — yellows
 )
 
+
+# ── CONFIG ────────────────────────────────────────────────────────────────────
+out_dir <- "C:/Users/Igor/Desktop/bachelor-thesis-R/visualisations"   # change to your target folder
+
+
 # ── Layout constants (px) ─────────────────────────────────────────────────────
 cell_px  <- 110   # bigger cells
 gap_px   <- 16
@@ -79,7 +84,7 @@ message("Saved: matrix_2d_labels.png")
 # ═════════════════════════════════════════════════════════════════════════════
 # PLOT 2  —  no axis labels, in-cell y subscripts (column-major)
 # ═════════════════════════════════════════════════════════════════════════════
-png("matrix_2d_subscripts.png", width = W, height = H, bg = "#d3d3d3")
+png(file.path(out_dir, "matrix_2d_subscripts.png"), width = W, height = H, bg = "#d3d3d3")
 grid.newpage()
 grid.rect(gp = gpar(fill = "#d3d3d3", col = NA))
 draw_cells()
@@ -113,7 +118,7 @@ message("Saved: matrix_2d_subscripts.png")
 
 
 # PLOT 2b — same matrix, but t-1 subscripts
-png("matrix_2d_subscripts_tminus1.png", width = W, height = H, bg = "#d3d3d3")
+png(file.path(out_dir, "matrix_2d_subscripts_tminus1.png"), width = W, height = H, bg = "#d3d3d3")
 grid.newpage()
 grid.rect(gp = gpar(fill = "#d3d3d3", col = NA))
 draw_cells()
@@ -149,7 +154,7 @@ message("Saved: matrix_2d_subscripts_tminus1.png")
 
 # COLORLESS 5x5 Y_{t-1} MATRIX (no colors, just y_{idx,t-1})
 
-png("matrix_2d_subscripts_tminus1_nocolor.png", width = W, height = H, bg = "#d3d3d3")
+png(file.path(out_dir, "matrix_2d_subscripts_tminus1_nocolor.png"), width = W, height = H, bg = "#d3d3d3")
 grid.newpage()
 grid.rect(gp = gpar(fill = "#d3d3d3", col = NA))
 draw_cells()  # if draw_cells() itself colors, you can comment this out or override with white below
@@ -210,7 +215,7 @@ V_H <- V_margin_t + n_cells * vec_cell + (n_cells - 1) * vec_gap + V_margin_b
 vx <- function(p) p / V_W
 vy <- function(p) p / V_H
 
-png("matrix_2d_vector.png", width = V_W, height = V_H, bg = "#d3d3d3")
+png(file.path(out_dir, "matrix_2d_vector.png"), width = V_W, height = V_H, bg = "#d3d3d3")
 grid.newpage()
 grid.rect(gp = gpar(fill = "#d3d3d3", col = NA))
 
@@ -270,7 +275,7 @@ V_H <- V_margin_t + n_cells * vec_cell + (n_cells - 1) * vec_gap + V_margin_b
 vx <- function(p) p / V_W
 vy <- function(p) p / V_H
 
-png("vector_ytminus1_color.png", width = V_W, height = V_H, bg = "#d3d3d3")
+png(file.path(out_dir, "vector_ytminus1_color.png"), width = V_W, height = V_H, bg = "#d3d3d3")
 grid.newpage()
 grid.rect(gp = gpar(fill = "#d3d3d3", col = NA))
 
@@ -327,7 +332,7 @@ V_H <- V_margin_t + n_cells * vec_cell + (n_cells - 1) * vec_gap + V_margin_b
 vx <- function(p) p / V_W
 vy <- function(p) p / V_H
 
-png("vector_ytminus1.png", width = V_W, height = V_H, bg = "#d3d3d3")
+png(file.path(out_dir, "vector_ytminus1.png"), width = V_W, height = V_H, bg = "#d3d3d3")
 grid.newpage()
 grid.rect(gp = gpar(fill = "#d3d3d3", col = NA))
 
@@ -360,7 +365,7 @@ message("Saved: vector_ytminus1.png")
 
 
 # 25x1 vector alpha (a1,...,a25), grey
-png("vector_alpha.png", width = V_W, height = V_H, bg = "#d3d3d3")
+png(file.path(out_dir, "vector_alpha.png"), width = V_W, height = V_H, bg = "#d3d3d3")
 grid.newpage()
 grid.rect(gp = gpar(fill = "#d3d3d3", col = NA))
 
@@ -394,7 +399,7 @@ message("Saved: vector_alpha.png")
 
 
 # 25x1 vector epsilon_t (epsilon1t,...,epsilon25t), grey
-png("vector_epsilon_t.png", width = V_W, height = V_H, bg = "#d3d3d3")
+png(file.path(out_dir, "vector_epsilon_t.png"), width = V_W, height = V_H, bg = "#d3d3d3")
 grid.newpage()
 grid.rect(gp = gpar(fill = "#d3d3d3", col = NA))
 
@@ -446,7 +451,7 @@ B_H <- B_margin_t + B_n * B_cell + (B_n - 1) * B_gap + B_margin_b
 bx <- function(p) p / B_W
 by <- function(p) p / B_H
 
-png("matrix_B_25x25.png", width = B_W, height = B_H, bg = "#d3d3d3")
+png(file.path(out_dir, "matrix_B_25x25.png"), width = B_W, height = B_H, bg = "#d3d3d3")
 grid.newpage()
 grid.rect(gp = gpar(fill = "#d3d3d3", col = NA))
 
@@ -509,7 +514,7 @@ A_H <- A_margin_t + A_n * A_cell + (A_n - 1) * A_gap + A_margin_b
 ax <- function(p) p / A_W
 ay <- function(p) p / A_H
 
-png("matrix_A_5x5.png", width = A_W, height = A_H, bg = "#d3d3d3")
+png(file.path(out_dir, "matrix_A_5x5.png"), width = A_W, height = A_H, bg = "#d3d3d3")
 grid.newpage()
 grid.rect(gp = gpar(fill = "#d3d3d3", col = NA))
 
@@ -571,7 +576,7 @@ B_H <- B_margin_t + B_n * B_cell + (B_n - 1) * B_gap + B_margin_b
 bx <- function(p) p / B_W
 by <- function(p) p / B_H
 
-png("matrix_B_5x5.png", width = B_W, height = B_H, bg = "#d3d3d3")
+png(file.path(out_dir, "matrix_B_5x5.png"), width = B_W, height = B_H, bg = "#d3d3d3")
 grid.newpage()
 grid.rect(gp = gpar(fill = "#d3d3d3", col = NA))
 
@@ -615,7 +620,7 @@ message("Saved: matrix_B_5x5.png")
 
 # 5x5 ERROR MATRIX E_t (epsilon_ij,t), grey, no colour/gradient
 
-png("matrix_Et_5x5.png", width = W, height = H, bg = "#d3d3d3")
+png(file.path(out_dir, "matrix_Et_5x5.png"), width = W, height = H, bg = "#d3d3d3")
 grid.newpage()
 grid.rect(gp = gpar(fill = "#d3d3d3", col = NA))
 

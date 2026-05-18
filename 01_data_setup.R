@@ -60,7 +60,7 @@ states  <- c("IL", "OH", "MI", "IN", "KY")
 sectors <- c("MFG", "CONS", "RET", "GOVT", "FIRE")
 
 # ── SAVE PLOT ─────────────────────────────────────────────────────────────────
-out_path <- "C:/Users/Igor/Desktop/bachelor-thesis-R/sectoral_employment.png"
+out_path <- "C:/Users/Igor/Desktop/bachelor-thesis-R/visualisations/sectoral_employment.png"
 
 png(filename = out_path,
     width    = 10,    # inches
