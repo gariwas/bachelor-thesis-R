@@ -1,10 +1,10 @@
 library(grid)
 
-states  <- c("IL", "OH", "MI", "IN")
-sectors <- c("MFG", "CONS", "RET", "GOVT")
+states  <- c("IL", "OH", "MI", "IN", "WI")
+sectors <- c("MFG", "CONS", "RET", "GOVT", "FIRE")
 
-NS <- length(states)
-NJ <- length(sectors)
+NS <- length(states)   # 5
+NJ <- length(sectors)  # 5
 
 sector_cols <- list(
   c("#1a3a6b", "#2b5ba8", "#4f8ef7", "#88b8ff", "#c4dbff"),  # MFG  — blues
@@ -14,13 +14,11 @@ sector_cols <- list(
   c("#5c4a00", "#a88200", "#e8d44d", "#f5e888", "#faf4c0")   # FIRE — yellows
 )
 
-
 # ── CONFIG ────────────────────────────────────────────────────────────────────
-out_dir <- "C:/Users/Igor/Desktop/bachelor-thesis-R/visualisations"   # change to your target folder
-
+out_dir <- "C:/Users/Igor/Desktop/bachelor-thesis-R/visualisations"
 
 # ── Layout constants (px) ─────────────────────────────────────────────────────
-cell_px  <- 110   # bigger cells
+cell_px  <- 110
 gap_px   <- 16
 margin_l <- 120
 margin_b <- 80
@@ -56,7 +54,7 @@ draw_cells <- function() {
 # ═════════════════════════════════════════════════════════════════════════════
 # PLOT 1  —  axis labels, no in-cell text
 # ═════════════════════════════════════════════════════════════════════════════
-png("matrix_2d_labels.png", width = W, height = H, bg = "#d3d3d3")
+png(file.path(out_dir, "matrix_2d_labels.png"), width = W, height = H, bg = "#d3d3d3")
 grid.newpage()
 grid.rect(gp = gpar(fill = "#d3d3d3", col = NA))
 draw_cells()
@@ -82,7 +80,7 @@ dev.off()
 message("Saved: matrix_2d_labels.png")
 
 # ═════════════════════════════════════════════════════════════════════════════
-# PLOT 2  —  no axis labels, in-cell y subscripts (column-major)
+# PLOT 2  —  no axis labels, in-cell x subscripts (column-major)
 # ═════════════════════════════════════════════════════════════════════════════
 png(file.path(out_dir, "matrix_2d_subscripts.png"), width = W, height = H, bg = "#d3d3d3")
 grid.newpage()
@@ -99,13 +97,11 @@ for (xi in seq_len(NS)) {
     idx     <- (xi - 1) * NJ + zi
     txt_col <- ifelse(xi <= 2, "white", label_col)
     
-    # "y" — large and bold
-    grid.text("y  ",
+    grid.text("x  ",
               x  = unit(nx(xc - 10), "npc"),
               y  = unit(ny(yc + 8), "npc"),
               gp = gpar(col = txt_col, fontsize = 40, fontface = 2))
     
-    # subscript "idx t" — clearly smaller but still legible
     grid.text(paste0(idx, "t"),
               x  = unit(nx(xc + 12), "npc"),
               y  = unit(ny(yc - 6), "npc"),
@@ -133,13 +129,11 @@ for (xi in seq_len(NS)) {
     idx     <- (xi - 1) * NJ + zi
     txt_col <- ifelse(xi <= 2, "white", label_col)
     
-    # "y" — large and bold
-    grid.text("y    ",
+    grid.text("x    ",
               x  = unit(nx(xc - 10), "npc"),
               y  = unit(ny(yc + 8), "npc"),
               gp = gpar(col = txt_col, fontsize = 40, fontface = 2))
     
-    # subscript "idx t-1"
     grid.text(paste0(idx, "t-1"),
               x  = unit(nx(xc + 12), "npc"),
               y  = unit(ny(yc - 6), "npc"),
@@ -151,13 +145,11 @@ dev.off()
 message("Saved: matrix_2d_subscripts_tminus1.png")
 
 
-
-# COLORLESS 5x5 Y_{t-1} MATRIX (no colors, just y_{idx,t-1})
-
+# COLORLESS 5x5 X_{t-1} MATRIX
 png(file.path(out_dir, "matrix_2d_subscripts_tminus1_nocolor.png"), width = W, height = H, bg = "#d3d3d3")
 grid.newpage()
 grid.rect(gp = gpar(fill = "#d3d3d3", col = NA))
-draw_cells()  # if draw_cells() itself colors, you can comment this out or override with white below
+draw_cells()
 
 for (xi in seq_len(NS)) {
   for (zi in seq_len(NJ)) {
@@ -168,7 +160,6 @@ for (xi in seq_len(NS)) {
     
     idx <- (xi - 1) * NJ + zi
     
-    # overwrite any previous fill: plain white boxes
     grid.rect(
       x      = unit(nx(xc), "npc"),
       y      = unit(ny(yc), "npc"),
@@ -179,13 +170,11 @@ for (xi in seq_len(NS)) {
     
     txt_col <- "black"
     
-    # "y" — large and bold
-    grid.text("y    ",
+    grid.text("x    ",
               x  = unit(nx(xc - 10), "npc"),
               y  = unit(ny(yc + 8), "npc"),
               gp = gpar(col = txt_col, fontsize = 40, fontface = 2))
     
-    # subscript "idx t-1"
     grid.text(paste0(idx, "t-1"),
               x  = unit(nx(xc + 12), "npc"),
               y  = unit(ny(yc - 6), "npc"),
@@ -225,7 +214,6 @@ for (k in seq_len(n_cells)) {
   fill <- sector_cols[[zi]][xi]
   
   xc     <- V_margin_l + vec_cell / 2
-  # k=1 at top → highest y; k=25 at bottom → lowest y
   y_bottom <- V_margin_b + (n_cells - k) * (vec_cell + vec_gap)
   yc       <- y_bottom + vec_cell / 2
   
@@ -239,7 +227,7 @@ for (k in seq_len(n_cells)) {
   
   txt_col <- ifelse(xi <= 2, "white", label_col)
   
-  grid.text("y ",
+  grid.text("x ",
             x  = unit(vx(xc - 10), "npc"),
             y  = unit(vy(yc + 8), "npc"),
             gp = gpar(col = txt_col, fontsize = 40, fontface = 2))
@@ -254,28 +242,10 @@ dev.off()
 message("Saved: matrix_2d_vector.png")
 
 
-
-
 # ═════════════════════════════════════════════════════════════════════════════
-# PLOT: colorful 25×1 vector of y_{t-1}
+# PLOT: colorful 25×1 vector of x_{t-1}
 # ═════════════════════════════════════════════════════════════════════════════
-
-n_cells  <- NS * NJ   # 25
-vec_cell <- cell_px
-vec_gap  <- gap_px
-
-V_margin_l <- 80
-V_margin_r <- 80
-V_margin_b <- 50
-V_margin_t <- 50
-
-V_W <- V_margin_l + vec_cell + V_margin_r
-V_H <- V_margin_t + n_cells * vec_cell + (n_cells - 1) * vec_gap + V_margin_b
-
-vx <- function(p) p / V_W
-vy <- function(p) p / V_H
-
-png(file.path(out_dir, "vector_ytminus1_color.png"), width = V_W, height = V_H, bg = "#d3d3d3")
+png(file.path(out_dir, "vector_xtminus1_color.png"), width = V_W, height = V_H, bg = "#d3d3d3")
 grid.newpage()
 grid.rect(gp = gpar(fill = "#d3d3d3", col = NA))
 
@@ -298,7 +268,7 @@ for (k in seq_len(n_cells)) {
   
   txt_col <- ifelse(xi <= 2, "white", label_col)
   
-  grid.text("y    ",
+  grid.text("x    ",
             x  = unit(vx(xc - 10), "npc"),
             y  = unit(vy(yc + 8), "npc"),
             gp = gpar(col = txt_col, fontsize = 40, fontface = 2))
@@ -310,29 +280,11 @@ for (k in seq_len(n_cells)) {
 }
 
 dev.off()
-message("Saved: vector_ytminus1_color.png")
+message("Saved: vector_xtminus1_color.png")
 
 
-
-
-
-# 25x1 vector y_{t-1}, no colors
-n_cells  <- NS * NJ  # 25
-vec_cell <- cell_px
-vec_gap  <- gap_px
-
-V_margin_l <- 80
-V_margin_r <- 80
-V_margin_b <- 50
-V_margin_t <- 50
-
-V_W <- V_margin_l + vec_cell + V_margin_r
-V_H <- V_margin_t + n_cells * vec_cell + (n_cells - 1) * vec_gap + V_margin_b
-
-vx <- function(p) p / V_W
-vy <- function(p) p / V_H
-
-png(file.path(out_dir, "vector_ytminus1.png"), width = V_W, height = V_H, bg = "#d3d3d3")
+# 25x1 vector x_{t-1}, no colors
+png(file.path(out_dir, "vector_xtminus1.png"), width = V_W, height = V_H, bg = "#d3d3d3")
 grid.newpage()
 grid.rect(gp = gpar(fill = "#d3d3d3", col = NA))
 
@@ -349,7 +301,7 @@ for (k in seq_len(n_cells)) {
     gp     = gpar(fill = "white", col = "black", lwd = 2.5)
   )
   
-  grid.text("y    ",
+  grid.text("x    ",
             x  = unit(vx(xc - 10), "npc"),
             y  = unit(vy(yc + 8), "npc"),
             gp = gpar(col = "black", fontsize = 40, fontface = 2))
@@ -361,7 +313,7 @@ for (k in seq_len(n_cells)) {
 }
 
 dev.off()
-message("Saved: vector_ytminus1.png")
+message("Saved: vector_xtminus1.png")
 
 
 # 25x1 vector alpha (a1,...,a25), grey
@@ -397,7 +349,6 @@ dev.off()
 message("Saved: vector_alpha.png")
 
 
-
 # 25x1 vector epsilon_t (epsilon1t,...,epsilon25t), grey
 png(file.path(out_dir, "vector_epsilon_t.png"), width = V_W, height = V_H, bg = "#d3d3d3")
 grid.newpage()
@@ -431,10 +382,7 @@ dev.off()
 message("Saved: vector_epsilon_t.png")
 
 
-
-
 # 25x25 matrix B with column-based colors from sector/state mapping
-
 B_margin_l <- 80
 B_margin_r <- 80
 B_margin_b <- 80
@@ -455,9 +403,8 @@ png(file.path(out_dir, "matrix_B_25x25.png"), width = B_W, height = B_H, bg = "#
 grid.newpage()
 grid.rect(gp = gpar(fill = "#d3d3d3", col = NA))
 
-for (i in seq_len(B_n)) {        # rows = current index i
-  for (j in seq_len(B_n)) {      # cols = lagged index j
-    # Recover (xi, zi) for column j (same vec ordering as before)
+for (i in seq_len(B_n)) {
+  for (j in seq_len(B_n)) {
     xi_j <- ceiling(j / NJ)
     zi_j <- ((j - 1) %% NJ) + 1
     fill_j <- sector_cols[[zi_j]][xi_j]
@@ -492,12 +439,10 @@ message("Saved: matrix_B_25x25.png")
 
 
 # ═════════════════════════════════════════════════════════════════════════════
-# PLOT 4  —  MAR matrixes
+# PLOT 4  —  MAR matrices
 # ═════════════════════════════════════════════════════════════════════════════
 
-
 # 5x5 matrix A (states x states), gradient only
-
 A_margin_l <- 80
 A_margin_r <- 80
 A_margin_b <- 80
@@ -518,11 +463,8 @@ png(file.path(out_dir, "matrix_A_5x5.png"), width = A_W, height = A_H, bg = "#d3
 grid.newpage()
 grid.rect(gp = gpar(fill = "#d3d3d3", col = NA))
 
-for (i in seq_len(A_n)) {        # rows = destination state
-  for (j in seq_len(A_n)) {      # cols = source state
-    
-    # simple state gradient: e.g. from light to dark by row
-    # replace this with your existing state gradient if you have one
+for (i in seq_len(A_n)) {
+  for (j in seq_len(A_n)) {
     grad_vals <- colorRampPalette(c("#eeeeff", "black"))(A_n)
     fill_ij <- grad_vals[i]
     
@@ -541,14 +483,14 @@ for (i in seq_len(A_n)) {        # rows = destination state
     
     text_col <- ifelse(i <= 2, "black", "white")
     
-    grid.text(bquote(a~"   "),
-              x  = unit(ax(xc - 4), "npc"),
+    grid.text(expression(bold(italic(a*" "))),
+              x  = unit(ax(xc - 8), "npc"),
               y  = unit(ay(yc + 3), "npc"),
-              gp = gpar(col = text_col, fontsize = 40, fontface = 2))
+              gp = gpar(col = text_col, fontsize = 42, fontface = 2))
     
-    grid.text(bquote(.(i)*","*.(j)),
-              x  = unit(ax(xc + 5), "npc"),
-              y  = unit(ay(yc - 2), "npc"),
+    grid.text(bquote(bold(.(i)*","*.(j))),
+              x  = unit(ax(xc + 10), "npc"),
+              y  = unit(ay(yc - 4), "npc"),
               gp = gpar(col = text_col, fontsize = 20, fontface = 2))
   }
 }
@@ -557,9 +499,7 @@ dev.off()
 message("Saved: matrix_A_5x5.png")
 
 
-
 # 5x5 matrix B (sectors x sectors), colours only
-
 B_margin_l <- 80
 B_margin_r <- 80
 B_margin_b <- 80
@@ -580,12 +520,8 @@ png(file.path(out_dir, "matrix_B_5x5.png"), width = B_W, height = B_H, bg = "#d3
 grid.newpage()
 grid.rect(gp = gpar(fill = "#d3d3d3", col = NA))
 
-for (i in seq_len(B_n)) {        # rows = destination sector
-  for (j in seq_len(B_n)) {      # cols = source sector
-    
-    # sector_cols is assumed to be a list of length 5 already,
-    # but here we just need one colour per sector index, so
-    # pick a representative (e.g. row 1)
+for (i in seq_len(B_n)) {
+  for (j in seq_len(B_n)) {
     base_col <- sector_cols[[j]][1]
     
     x_left   <- B_margin_l + (j - 1) * (B_cell + B_gap)
@@ -601,14 +537,14 @@ for (i in seq_len(B_n)) {        # rows = destination sector
       gp     = gpar(fill = base_col, col = "white", lwd = 1.5)
     )
     
-    grid.text(bquote(b~"   "),
-              x  = unit(bx(xc - 4), "npc"),
+    grid.text(expression(bold(italic(b*" "))),
+              x  = unit(bx(xc - 8), "npc"),
               y  = unit(by(yc + 3), "npc"),
-              gp = gpar(col = "white", fontsize = 40, fontface = 2))
+              gp = gpar(col = "white", fontsize = 42, fontface = 2))
     
-    grid.text(bquote(.(i)*","*.(j)),
-              x  = unit(bx(xc + 5), "npc"),
-              y  = unit(by(yc - 2), "npc"),
+    grid.text(bquote(bold(.(i)*","*.(j))),
+              x  = unit(bx(xc + 10), "npc"),
+              y  = unit(by(yc - 4), "npc"),
               gp = gpar(col = "white", fontsize = 20, fontface = 2))
   }
 }
@@ -617,9 +553,7 @@ dev.off()
 message("Saved: matrix_B_5x5.png")
 
 
-
 # 5x5 ERROR MATRIX E_t (epsilon_ij,t), grey, no colour/gradient
-
 png(file.path(out_dir, "matrix_Et_5x5.png"), width = W, height = H, bg = "#d3d3d3")
 grid.newpage()
 grid.rect(gp = gpar(fill = "#d3d3d3", col = NA))
@@ -631,7 +565,6 @@ for (xi in seq_len(NS)) {  # rows: i = 1,...,5 (states)
     xc       <- x_left   + cell_px / 2
     yc       <- y_bottom + cell_px / 2
     
-    # grey cell
     grid.rect(
       x      = unit(nx(xc), "npc"),
       y      = unit(ny(yc), "npc"),
@@ -640,17 +573,14 @@ for (xi in seq_len(NS)) {  # rows: i = 1,...,5 (states)
       gp     = gpar(fill = "grey80", col = "black", lwd = 2)
     )
     
-    # label epsilon_{ij,t} as e.g. "ε11t"
-    lab <- paste0("\u03b5", xi, zi, "t")
-    
-    grid.text(bquote(epsilon~"   "),
-              x  = unit(nx(xc - 4), "npc"),
+    grid.text(expression(bold(italic(epsilon*" "))),
+              x  = unit(nx(xc - 8), "npc"),
               y  = unit(ny(yc + 3), "npc"),
-              gp = gpar(col = "black", fontsize = 40, fontface = 2))
+              gp = gpar(col = "black", fontsize = 42, fontface = 2))
     
-    grid.text(bquote(.(xi)*","*.(zi)*","*t),
-              x  = unit(nx(xc + 5), "npc"),
-              y  = unit(ny(yc - 2), "npc"),
+    grid.text(bquote(bold(.(xi)*","*.(zi))),
+              x  = unit(nx(xc + 10), "npc"),
+              y  = unit(ny(yc - 4), "npc"),
               gp = gpar(col = "black", fontsize = 20, fontface = 2))
   }
 }

@@ -1,12 +1,10 @@
-# Working with data
-
 # ── CONFIG ────────────────────────────────────────────────────────────────────
 data_dir <- "C:/Users/Igor/Desktop/bachelor-thesis-R/Data/"
 
 states  <- c("IL", "OH", "MI", "IN", "KY")
 sectors <- c("MFG", "CONS", "RET", "GOVT", "FIRE")
 
-# ── READ ALL 9 SERIES ─────────────────────────────────────────────────────────
+# ── READ ALL 25 SERIES ────────────────────────────────────────────────────────
 series_list <- list()
 
 for (s in states) {
@@ -59,46 +57,58 @@ library(tensorTS)
 states  <- c("IL", "OH", "MI", "IN", "KY")
 sectors <- c("MFG", "CONS", "RET", "GOVT", "FIRE")
 
+state_names <- c(
+  IL = "ILLINOIS",
+  OH = "OHIO",
+  MI = "MICHIGAN",
+  IN = "INDIANA",
+  KY = "KENTUCKY"
+)
+
+sector_names <- c(
+  MFG  = "MANUFACTURING",
+  CONS = "CONSTRUCTION",
+  RET  = "RETAIL TRADE",
+  GOVT = "GOVERNMENT",
+  FIRE = "FINANCE & INSURANCE"
+)
+
 # ── SAVE PLOT ─────────────────────────────────────────────────────────────────
 out_path <- "C:/Users/Igor/Desktop/bachelor-thesis-R/visualisations/sectoral_employment.png"
 
 png(filename = out_path,
-    width    = 10,    # inches
-    height   = 8,
+    width    = 16,
+    height   = 10,
     units    = "in",
-    res      = 300)   # 300 dpi — print quality
+    res      = 300)
 
-# ── PLOT GRID WITH TITLES ─────────────────────────────────────────────────────
+# ── PLOT GRID ─────────────────────────────────────────────────────────────────
 par(mfrow = c(length(states), length(sectors)),
-    mar   = c(2, 2, 2, 1),
+    mar   = c(2, 2, 2.8, 1),
     oma   = c(1, 1, 3, 1))
-
-n_plot <- 100
 
 for (i in seq_along(states)) {
   for (j in seq_along(sectors)) {
-    plot(xx[1:n_plot, i, j],
-         type = "l",
-         col  = "steelblue",
-         xlab = "",
-         ylab = "",
-         main = paste0(states[i], sectors[j]),
-         cex.main = 0.95)
+    plot(common_dates, xx[, i, j],
+         type     = "l",
+         col      = "steelblue",
+         xlab     = "",
+         ylab     = "",
+         main     = paste0(state_names[states[i]], " — ", sector_names[sectors[j]]),
+         cex.main = 1.45,
+         xaxt     = "n")
+    axis.Date(1,
+              at     = seq(min(common_dates), max(common_dates), by = "5 years"),
+              format = "%Y",
+              cex.axis = 0.7)
   }
 }
 
-
-
 par(mfrow = c(1, 1))
-dev.off()  # ← closes device and writes the file
+dev.off()
 
-
-# end of 01_data_setup.R
+# ── SAVE TENSOR ───────────────────────────────────────────────────────────────
 saveRDS(xx, "C:/Users/Igor/Desktop/bachelor-thesis-R/xx_tensor.rds")
-
-
-
-
 
 
 

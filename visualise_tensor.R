@@ -1,8 +1,8 @@
 #install.packages("rgl")
 library(rgl)
 
-states  <- c("IL", "OH", "MI", "IN")
-sectors <- c("MFG", "CONS", "RET", "GOVT")
+states  <- c("IL", "OH", "MI", "IN", "KY")
+sectors <- c("MFG", "CONS", "RET", "GOVT", "FIRE")
 T_steps <- 16
 
 NS <- length(states)
@@ -48,7 +48,7 @@ draw_cube <- function(x0, y0, z0, col) {
 }
 
 open3d(windowRect = c(50, 50, 900, 700))
-bg3d(color = "lightgrey")
+bg3d(color = "#d3d3d3")
 
 # ADD THIS — disables OpenGL lighting entirely:
 material3d(lit = FALSE)

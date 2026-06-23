@@ -129,9 +129,9 @@ print(results_df)
 # ---------------------------------------------------------------------------
 # DIEBOLD-MARIANO TEST
 # ---------------------------------------------------------------------------
-dm_result <- dm.test(e1 = frob_mar - frob_var,
-                     e2 = rep(0, n_windows),
-                     alternative = "less",   # H1: MAR loss < VAR loss
+dm_result <- dm.test(e1 = sqrt(frob_mar),
+                     e2 = sqrt(frob_var),
+                     alternative = "less",
                      h = 1, power = 2)
 cat("\n=== DIEBOLD-MARIANO TEST (H1: MAR < VAR) ===\n")
 print(dm_result)

@@ -1,6 +1,6 @@
 # ── PATHS ─────────────────────────────────────────────────────────────────────
-est_path  <- "C:/Users/Igor/Desktop/bachelor-thesis-R/est_mar.rds"
-out_dir   <- "C:/Users/Igor/Desktop/bachelor-thesis-R/visualisations/"
+est_dir <- "C:/Users/Igor/Desktop/bachelor-thesis-R/"
+out_dir <- "C:/Users/Igor/Desktop/bachelor-thesis-R/visualisations/"
 
 states  <- c("IL", "OH", "MI", "IN", "KY")
 sectors <- c("MFG", "CONS", "RET", "GOVT", "FIRE")
@@ -8,15 +8,17 @@ sectors <- c("MFG", "CONS", "RET", "GOVT", "FIRE")
 # ── LOAD ──────────────────────────────────────────────────────────────────────
 library(ggplot2)
 library(reshape2)
+library(patchwork)
 
-est <- readRDS(est_path)
+# ── HELPERS ───────────────────────────────────────────────────────────────────
+get_mode_matrices <- function(est) {
+  node <- est$A[[1]][[1]]
+  if (length(node) == 1 && is.list(node[[1]])) node <- node[[1]]
+  A <- matrix(node[[1]], nrow = sqrt(length(node[[1]])))
+  B <- matrix(node[[2]], nrow = sqrt(length(node[[2]])))
+  list(A = A, B = B)
+}
 
-A <- est$A[[1]][[1]][[1]]
-B <- est$A[[1]][[1]][[2]]
-rownames(A) <- colnames(A) <- states
-rownames(B) <- colnames(B) <- sectors
-
-# ── HELPER ────────────────────────────────────────────────────────────────────
 plot_heatmap <- function(mat, title) {
   df <- melt(round(mat, 3))
   colnames(df) <- c("Row", "Col", "value")
@@ -40,13 +42,33 @@ plot_heatmap <- function(mat, title) {
     )
 }
 
-# ── EXPORT ────────────────────────────────────────────────────────────────────
-ggsave(paste0(out_dir, "heatmap_A.png"),
-       plot = plot_heatmap(A, "Matrix A — State Dynamics"),
-       width = 5.5, height = 4.5, dpi = 200)
+# ── LOOP OVER METHODS ─────────────────────────────────────────────────────────
+methods <- c("proj", "lse", "mle")
 
-ggsave(paste0(out_dir, "heatmap_B.png"),
-       plot = plot_heatmap(B, "Matrix B — Sector Dynamics"),
-       width = 5.5, height = 4.5, dpi = 200)
-
-cat("Saved heatmap_A.png and heatmap_B.png to", out_dir, "\n")
+for (m in methods) {
+  est_path <- paste0(est_dir, "est_", m, ".rds")
+  
+  if (!file.exists(est_path)) {
+    cat("Skipping", m, "— file not found:", est_path, "\n")
+    next
+  }
+  
+  est   <- readRDS(est_path)
+  modes <- get_mode_matrices(est)
+  A     <- modes$A
+  B     <- modes$B
+  rownames(A) <- colnames(A) <- states
+  rownames(B) <- colnames(B) <- sectors
+  
+  label <- toupper(m)
+  
+  combined <- plot_heatmap(A, paste0("Matrix A — State Dynamics (", label, ")")) +
+    plot_heatmap(B, paste0("Matrix B — Sector Dynamics (", label, ")")) +
+    plot_layout(ncol = 2)
+  
+  ggsave(paste0(out_dir, "heatmap_", m, ".png"),
+         plot   = combined,
+         width  = 11, height = 4.5, dpi = 200)
+  
+  cat("Saved heatmap_", m, ".png\n", sep = "")
+}

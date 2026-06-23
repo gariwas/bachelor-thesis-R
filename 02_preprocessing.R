@@ -78,15 +78,62 @@ dev.off()
 
 
 # ══════════════════════════════════════════════════════════════════════════════
-# STEP 5: ACF CHECK
+# STEP 5b: SAVE ACF OF DIFFERENCED DATA — ggplot2 version
 # ══════════════════════════════════════════════════════════════════════════════
-# Significant spike at lag 12 → seasonal pattern → may need seasonal differencing
 
-# ── STEP 5b: SAVE ACF OF DIFFERENCED DATA (original, before model fitting) ────
-png(filename = "C:/Users/Igor/Desktop/bachelor-thesis-R/visualisations/acf_original.png",
-    width = 10, height = 8, units = "in", res = 300)
-mplot.acf(xx_diff)
-dev.off()
+library(ggplot2)
+library(patchwork)   # install.packages("patchwork") if needed
+
+T_len <- dim(xx_diff)[1]
+ci    <- qnorm(0.975) / sqrt(T_len)   # 95% CI band
+
+plot_list <- list()
+
+for (i in seq_along(states)) {
+  for (j in seq_along(sectors)) {
+    
+    acf_obj <- acf(xx_diff[, i, j], lag.max = 24, plot = FALSE)
+    df      <- data.frame(lag = as.numeric(acf_obj$lag),
+                          acf = as.numeric(acf_obj$acf))
+    df      <- df[df$lag > 0, ]   # drop lag 0 (always 1)
+    
+    p <- ggplot(df, aes(x = lag, y = acf)) +
+      geom_hline(yintercept = 0,   color = "grey40", linewidth = 0.4) +
+      geom_hline(yintercept =  ci, color = "#2166ac", linetype = "dashed", linewidth = 0.5) +
+      geom_hline(yintercept = -ci, color = "#2166ac", linetype = "dashed", linewidth = 0.5) +
+      geom_segment(aes(xend = lag, yend = 0),
+                   color = "darkorange", linewidth = 0.8) +
+      geom_point(color = "darkorange", size = 1.2) +
+      scale_x_continuous(breaks = c(6, 12, 18, 24)) +
+      scale_y_continuous(limits = c(-1, 1)) +
+      labs(title = paste0(states[i], " · ", sectors[j]), x = NULL, y = NULL) +
+      theme_minimal(base_size = 8) +
+      theme(
+        plot.title   = element_text(face = "bold", size = 7, hjust = 0.5),
+        panel.grid.minor = element_blank(),
+        panel.grid.major = element_line(color = "grey92"),
+        axis.text    = element_text(size = 6),
+        plot.margin  = margin(3, 4, 3, 4)
+      )
+    
+    plot_list[[paste0(states[i], sectors[j])]] <- p
+  }
+}
+
+# Assemble 5×5 grid with patchwork
+combined <- wrap_plots(plot_list, nrow = length(states), ncol = length(sectors)) +
+  plot_annotation(
+    title    = "ACF of First-Differenced Employment (Lags 1–24)",
+    theme    = theme(
+      plot.title = element_text(face = "bold", size = 11, hjust = 0.5, margin = margin(b = 6))
+    )
+  )
+
+ggsave(
+  filename = "C:/Users/Igor/Desktop/bachelor-thesis-R/visualisations/acf_original.png",
+  plot     = combined,
+  width    = 14, height = 10, dpi = 300
+)
 
 # ══════════════════════════════════════════════════════════════════════════════
 # PREPROCESSING DONE — xx_diff is ready for tenAR.est
