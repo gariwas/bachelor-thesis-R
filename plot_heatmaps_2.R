@@ -29,8 +29,8 @@ plot_heatmap <- function(mat, title) {
       panel.grid       = element_blank(),
       plot.title       = element_text(face = "bold", hjust = 0.5, size = 14),
       legend.position  = "right",
-      plot.background  = element_rect(fill = "lightgrey", color = NA),
-      panel.background = element_rect(fill = "lightgrey", color = NA)
+      plot.background  = element_rect(fill = "white", color = NA),
+      panel.background = element_rect(fill = "white", color = NA)
     )
 }
 

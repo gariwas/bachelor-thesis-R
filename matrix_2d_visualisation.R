@@ -82,9 +82,9 @@ message("Saved: matrix_2d_labels.png")
 # ═════════════════════════════════════════════════════════════════════════════
 # PLOT 2  —  no axis labels, in-cell x subscripts (column-major)
 # ═════════════════════════════════════════════════════════════════════════════
-png(file.path(out_dir, "matrix_2d_subscripts.png"), width = W, height = H, bg = "#d3d3d3")
+png(file.path(out_dir, "matrix_2d_subscripts.png"), width = W, height = H, bg = "white")
 grid.newpage()
-grid.rect(gp = gpar(fill = "#d3d3d3", col = NA))
+grid.rect(gp = gpar(fill = "white", col = NA))
 draw_cells()
 
 for (xi in seq_len(NS)) {
@@ -97,14 +97,24 @@ for (xi in seq_len(NS)) {
     idx     <- (xi - 1) * NJ + zi
     txt_col <- ifelse(xi <= 2, "white", label_col)
     
-    grid.text("x  ",
-              x  = unit(nx(xc - 10), "npc"),
-              y  = unit(ny(yc + 8), "npc"),
-              gp = gpar(col = txt_col, fontsize = 40, fontface = 2))
+    # ── ADD THIS BLOCK ──────────────────────────────────────────────────
+    grid.rect(
+      x      = unit(nx(xc), "npc"),
+      y      = unit(ny(yc), "npc"),
+      width  = unit(nx(cell_px), "npc"),
+      height = unit(ny(cell_px), "npc"),
+      gp     = gpar(fill = NA, col = "black", lwd = 2)
+    )
+    # ────────────────────────────────────────────────────────────────────
     
-    grid.text(paste0(idx, "t"),
-              x  = unit(nx(xc + 12), "npc"),
-              y  = unit(ny(yc - 6), "npc"),
+    grid.text(expression(bold(italic(x))),
+              x  = unit(nx(xc - 15), "npc"),
+              y  = unit(ny(yc + 3), "npc"),
+              gp = gpar(col = txt_col, fontsize = 60, fontface = 2))
+    
+    grid.text(bquote(bold(.(idx)*t)),
+              x  = unit(nx(xc + 20), "npc"),
+              y  = unit(ny(yc - 10), "npc"),
               gp = gpar(col = txt_col, fontsize = 30, fontface = 2))
   }
 }
@@ -114,9 +124,9 @@ message("Saved: matrix_2d_subscripts.png")
 
 
 # PLOT 2b — same matrix, but t-1 subscripts
-png(file.path(out_dir, "matrix_2d_subscripts_tminus1.png"), width = W, height = H, bg = "#d3d3d3")
+png(file.path(out_dir, "matrix_2d_subscripts_tminus1.png"), width = W, height = H, bg = "white")
 grid.newpage()
-grid.rect(gp = gpar(fill = "#d3d3d3", col = NA))
+grid.rect(gp = gpar(fill = "white", col = NA))
 draw_cells()
 
 for (xi in seq_len(NS)) {
@@ -129,14 +139,24 @@ for (xi in seq_len(NS)) {
     idx     <- (xi - 1) * NJ + zi
     txt_col <- ifelse(xi <= 2, "white", label_col)
     
-    grid.text("x    ",
-              x  = unit(nx(xc - 10), "npc"),
-              y  = unit(ny(yc + 8), "npc"),
-              gp = gpar(col = txt_col, fontsize = 40, fontface = 2))
+    # ── ADD THIS BLOCK ──────────────────────────────────────────────────
+    grid.rect(
+      x      = unit(nx(xc), "npc"),
+      y      = unit(ny(yc), "npc"),
+      width  = unit(nx(cell_px), "npc"),
+      height = unit(ny(cell_px), "npc"),
+      gp     = gpar(fill = NA, col = "black", lwd = 2)
+    )
+    # ────────────────────────────────────────────────────────────────────
     
-    grid.text(paste0(idx, "t-1"),
-              x  = unit(nx(xc + 12), "npc"),
-              y  = unit(ny(yc - 6), "npc"),
+    grid.text(expression(bold(italic(x))),
+              x  = unit(nx(xc - 15), "npc"),
+              y  = unit(ny(yc + 3), "npc"),
+              gp = gpar(col = txt_col, fontsize = 60, fontface = 2))
+    
+    grid.text(bquote(bold(.(idx)*t)),
+              x  = unit(nx(xc + 20), "npc"),
+              y  = unit(ny(yc - 10), "npc"),
               gp = gpar(col = txt_col, fontsize = 30, fontface = 2))
   }
 }
@@ -148,7 +168,7 @@ message("Saved: matrix_2d_subscripts_tminus1.png")
 # COLORLESS 5x5 X_{t-1} MATRIX
 png(file.path(out_dir, "matrix_2d_subscripts_tminus1_nocolor.png"), width = W, height = H, bg = "#d3d3d3")
 grid.newpage()
-grid.rect(gp = gpar(fill = "#d3d3d3", col = NA))
+grid.rect(gp = gpar(fill = "white", col = NA))
 draw_cells()
 
 for (xi in seq_len(NS)) {
@@ -459,9 +479,9 @@ A_H <- A_margin_t + A_n * A_cell + (A_n - 1) * A_gap + A_margin_b
 ax <- function(p) p / A_W
 ay <- function(p) p / A_H
 
-png(file.path(out_dir, "matrix_A_5x5.png"), width = A_W, height = A_H, bg = "#d3d3d3")
+png(file.path(out_dir, "matrix_A_5x5.png"), width = A_W, height = A_H, bg = "white")
 grid.newpage()
-grid.rect(gp = gpar(fill = "#d3d3d3", col = NA))
+grid.rect(gp = gpar(fill = "white", col = NA))
 
 for (i in seq_len(A_n)) {
   for (j in seq_len(A_n)) {
@@ -478,20 +498,20 @@ for (i in seq_len(A_n)) {
       y      = unit(ay(yc), "npc"),
       width  = unit(ax(A_cell), "npc"),
       height = unit(ay(A_cell), "npc"),
-      gp     = gpar(fill = fill_ij, col = "white", lwd = 1.5)
+      gp     = gpar(fill = fill_ij, col = "black", lwd = 2)
     )
     
     text_col <- ifelse(i <= 2, "black", "white")
     
-    grid.text(expression(bold(italic(a*" "))),
-              x  = unit(ax(xc - 8), "npc"),
+    grid.text(expression(bold(italic(a))),
+              x  = unit(ax(xc - 20), "npc"),
               y  = unit(ay(yc + 3), "npc"),
-              gp = gpar(col = text_col, fontsize = 42, fontface = 2))
+              gp = gpar(col = text_col, fontsize = 55, fontface = 2))
     
     grid.text(bquote(bold(.(i)*","*.(j))),
-              x  = unit(ax(xc + 10), "npc"),
-              y  = unit(ay(yc - 4), "npc"),
-              gp = gpar(col = text_col, fontsize = 20, fontface = 2))
+              x  = unit(ax(xc + 20), "npc"),
+              y  = unit(ay(yc - 10), "npc"),
+              gp = gpar(col = text_col, fontsize = 30, fontface = 2))
   }
 }
 
@@ -516,9 +536,9 @@ B_H <- B_margin_t + B_n * B_cell + (B_n - 1) * B_gap + B_margin_b
 bx <- function(p) p / B_W
 by <- function(p) p / B_H
 
-png(file.path(out_dir, "matrix_B_5x5.png"), width = B_W, height = B_H, bg = "#d3d3d3")
+png(file.path(out_dir, "matrix_B_5x5.png"), width = B_W, height = B_H, bg = "white")
 grid.newpage()
-grid.rect(gp = gpar(fill = "#d3d3d3", col = NA))
+grid.rect(gp = gpar(fill = "white", col = NA))
 
 for (i in seq_len(B_n)) {
   for (j in seq_len(B_n)) {
@@ -534,18 +554,18 @@ for (i in seq_len(B_n)) {
       y      = unit(by(yc), "npc"),
       width  = unit(bx(B_cell), "npc"),
       height = unit(by(B_cell), "npc"),
-      gp     = gpar(fill = base_col, col = "white", lwd = 1.5)
+      gp     = gpar(fill = base_col, col = "black", lwd = 2)
     )
     
     grid.text(expression(bold(italic(b*" "))),
-              x  = unit(bx(xc - 8), "npc"),
+              x  = unit(bx(xc - 10), "npc"),
               y  = unit(by(yc + 3), "npc"),
-              gp = gpar(col = "white", fontsize = 42, fontface = 2))
+              gp = gpar(col = "white", fontsize = 55, fontface = 2))
     
     grid.text(bquote(bold(.(i)*","*.(j))),
-              x  = unit(bx(xc + 10), "npc"),
-              y  = unit(by(yc - 4), "npc"),
-              gp = gpar(col = "white", fontsize = 20, fontface = 2))
+              x  = unit(bx(xc + 20), "npc"),
+              y  = unit(by(yc - 10), "npc"),
+              gp = gpar(col = "white", fontsize = 30, fontface = 2))
   }
 }
 
@@ -554,9 +574,9 @@ message("Saved: matrix_B_5x5.png")
 
 
 # 5x5 ERROR MATRIX E_t (epsilon_ij,t), grey, no colour/gradient
-png(file.path(out_dir, "matrix_Et_5x5.png"), width = W, height = H, bg = "#d3d3d3")
+png(file.path(out_dir, "matrix_Et_5x5.png"), width = W, height = H, bg = "white")
 grid.newpage()
-grid.rect(gp = gpar(fill = "#d3d3d3", col = NA))
+grid.rect(gp = gpar(fill = "white", col = NA))
 
 for (xi in seq_len(NS)) {  # rows: i = 1,...,5 (states)
   for (zi in seq_len(NJ)) {  # cols: j = 1,...,5 (sectors)
@@ -574,14 +594,14 @@ for (xi in seq_len(NS)) {  # rows: i = 1,...,5 (states)
     )
     
     grid.text(expression(bold(italic(epsilon*" "))),
-              x  = unit(nx(xc - 8), "npc"),
+              x  = unit(nx(xc - 10), "npc"),
               y  = unit(ny(yc + 3), "npc"),
-              gp = gpar(col = "black", fontsize = 42, fontface = 2))
+              gp = gpar(col = "black", fontsize = 70, fontface = 2))
     
     grid.text(bquote(bold(.(xi)*","*.(zi))),
-              x  = unit(nx(xc + 10), "npc"),
-              y  = unit(ny(yc - 4), "npc"),
-              gp = gpar(col = "black", fontsize = 20, fontface = 2))
+              x  = unit(nx(xc + 20), "npc"),
+              y  = unit(ny(yc - 10), "npc"),
+              gp = gpar(col = "black", fontsize = 30, fontface = 2))
   }
 }
 

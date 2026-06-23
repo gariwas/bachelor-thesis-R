@@ -1,2 +1,1 @@
 # bachelor-thesis-R
-# Wassuuuuuup
